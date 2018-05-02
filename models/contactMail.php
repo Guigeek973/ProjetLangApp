@@ -22,4 +22,3 @@ function sendContactMail(){
 function envoyerMessage($mail,$msg,$header){
     mail($mail,'Contact',$msg,$header);
 }
-?>

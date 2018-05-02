@@ -200,7 +200,7 @@ function start_page_secured($title)
                         </form>
                         <form id="formOptions" method="post" action="/controller/controllerIndex.php" role="form">
                             <div class="col-md-3 form-group">
-                                <input type="submit" class="btn btn-default btn-lg" name="action" value="Profil">
+                                <button class="btn btn-default btn-lg" name="action" value="Profil">
                                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                             </div>
                             <div class="col-md-3">
