@@ -28,7 +28,7 @@ $data = getInfosProfil();
             echo "<div class=\"row\"><label>Your wished language 3 : </label>" . $data['souhait3'] . "</div><br/>";
             echo "<div class=\"row\"><label>Associated level wish 3 : </label>" . $data['niv_souhait3'] . "</div><br/>";
             ?>
-            <form action="controllerProfil" method="post">
+            <form action="controllerProfil.php" method="post">
                 <input type="submit" name="Modify" value="Modify"/>
                 <input type="submit" name="Back to main page" value="Back to main page"
             </form>
