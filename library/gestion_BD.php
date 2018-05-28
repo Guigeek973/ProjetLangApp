@@ -1,4 +1,5 @@
 <?php
+
 function connection() {
     try {
         $dbLink = 'mysql:host=mysql-projetlangapp.alwaysdata.net; dbname=projetlangapp_db'; //Ligne 1

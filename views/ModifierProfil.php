@@ -4,10 +4,12 @@ $title="Profil";
 start_page_min($title);
 
 $data = getInfosProfil();
+$lang = getInfosLanguages();
+$allLang = getAllLanguages();
+$allLevel = getAllLevel();
 ?>
 <div class="container-fluid">
     <div class="text-center">
-        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="profil">Your profile</h4>
     </div>
     <div class="column">
@@ -16,21 +18,54 @@ $data = getInfosProfil();
             <img src="avatar.png" class="img-responsive" alt="Responsive image">
             <br/>
             <?php
-            echo "<div class=\"row\"><label>Username : </label><input type='text' placeholder='". $data['username'] ."'/></div><br/>";
             echo "<div class=\"row\"><label>Firstname : </label><input type='text' placeholder='". $data['firstname'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Lastname : </label><input type='text' placeholder='". $data['lastname'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Your email : </label><input type='text' placeholder='". $data['mail'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Your native language : </label><input type='text' placeholder='". $data['natal'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Your wished language 1 : </label><input type='text' placeholder='". $data['souhait1'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Associated level wish 1 : </label><input type='text' placeholder='". $data['niv_souhait1'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Your wished language 2 : </label><input type='text' placeholder='". $data['souhait2'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Associated level wish 2 : </label><input type='text' placeholder='". $data['niv_souhait2'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Your wished language 3 : </label><input type='text' placeholder='". $data['souhait3'] ."'/></div><br/>";
-            echo "<div class=\"row\"><label>Associated level wish 3 : </label><input type='text' placeholder='". $data['niv_souhait3'] ."'/></div><br/>";
+            echo "<div class=\"row\"><label>Lastname : </label><input type='text' placeholder='". $data['name'] ."'/></div><br/>";
+            echo "<div class=\"row\"><label>Your email : </label><input type='text' placeholder='". $data['email'] ."'/></div><br/>";
+
+            echo "<div class=\"row\"><label>Your actual native language : ". $lang[2]['name'] ."</label><br/><select>";
+                for($i = 0; $i < sizeof($allLang); $i++) {
+                    echo "<option value='". $allLang[$i]['id'] ."'>". $allLang[$i]['name'] ."</option>";
+                }
+                echo "</select></div><br/>";
+
+            echo "<div class=\"row\"><label>Your actual wished language 1 : ". $lang[0]['name'] ."</label><br/><select>";
+                for($i = 0; $i < sizeof($allLang); $i++) {
+                    echo "<option value='". $allLang[$i]['id'] ."'>". $allLang[$i]['name'] ."</option>";
+                }
+            echo "</select></div><br/>";
+
+            echo "<div class=\"row\"><label>Associated actual level wish 1 : " . $lang[1]['niveau'] . "</label><br/><select>";
+                for($i = 0; $i < sizeof($allLevel); $i++) {
+                    echo "<option value='". $allLevel[$i]['id'] ."'>". $allLevel[$i]['niveau'] ."</option>";
+                }
+            echo "</select></div><br/>";
+            
+
+            echo "<div class=\"row\"><label>Your actual wished language 2 : ". $lang[0]['name'] ."</label><br/><select>";
+                for($i = 0; $i < sizeof($allLang); $i++) {
+                    echo "<option value='". $allLang[$i]['id'] ."'>". $allLang[$i]['name'] ."</option>";
+                }
+                echo "</select></div><br/>";
+            echo "<div class=\"row\"><label>Associated actual level wish 2 : " . $lang[1]['niveau'] . "</label><br/><select>";
+                for($i = 0; $i < sizeof($allLevel); $i++) {
+                    echo "<option value='". $allLevel[$i]['id'] ."'>". $allLevel[$i]['niveau'] ."</option>";
+                }
+                echo "</select></div><br/>";
+
+            echo "<div class=\"row\"><label>Your actual wished language 3 : ". $lang[0]['name'] ."</label><br/><select>";
+                for($i = 0; $i < sizeof($allLang); $i++) {
+                    echo "<option value='". $allLang[$i]['id'] ."'>". $allLang[$i]['name'] ."</option>";
+                }
+                echo "</select></div><br/>";
+            echo "<div class=\"row\"><label>Associated actual level wish 3 : " . $lang[1]['niveau'] . "</label><br/><select>";
+                for($i = 0; $i < sizeof($allLevel); $i++) {
+                    echo "<option value='". $allLevel[$i]['id'] ."'>". $allLevel[$i]['niveau'] ."</option>";
+                }
+                echo "</select></div><br/>";
             ?>
-            <form action="controllerProfilModif" method="post">
+            <form action="../controller/controllerProfilModif.php" method="post">
                 <input type="submit" name="Validate" value="Validate"/>
-                <input type="submit" name="Back to main page" value="Back to main page"
+                <input type="submit" name="Back to main page" value="Back to main page"/>
             </form>
         </div>
     </div>
