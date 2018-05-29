@@ -2,7 +2,6 @@
 
 session_start();
 
-
 if($_GET['action'] == 'Deconnection'){
     unset($_SESSION["session"]);
     unset($_SESSION["admin"]);

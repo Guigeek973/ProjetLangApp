@@ -61,7 +61,7 @@ function checkPhoto(){
     //répertoire de déstination
     $target_dir = "Storage/";
     $_FILES["fileselect"]["name"]=$_SESSION['idUser'];
-    $name=basename($_FILES["fileselect"]["name"])
+    $name=basename($_FILES["fileselect"]["name"]);
     $target_file = $target_dir . $name ;
     //on initialise la variable update ok
     $uploadOk = 1;
@@ -103,7 +103,7 @@ function checkPhoto(){
     // erreur
     if ($uploadOk == 0) {
         $message = "Erreur! impossible d'ajouter l'image.";
-        echo $messag);
+        echo $message;
 
         // pas d'erreur, on procède à l'enregistrement de la photo
     } else {
@@ -122,8 +122,10 @@ function checkPhoto(){
             $prep1->execute();
 
             $query2 = 'INSERT INTO photo (NomFichier, Stockage, Taille) VALUES (:nom,:chemin,:taille)  ';
-            $prep2 = $connect->prepare($query1);
-            $prep2->bindParam(':nom',$_FILES["fileselect"]["name"],':chemin', $target_file, ':taille', $_FILES["fileselect"]["size"]  PDO::PARAM_STR);
+            $prep2 = $connect->prepare($query2);
+            $prep2->bindParam(':nom',$_FILES["fileselect"]["name"], PDO::PARAM_STR);
+            $prep2->bindParam(':chemin', $target_file, PDO::PARAM_STR);
+            $prep2->bindParam(':taille', $_FILES["fileselect"]["size"], PDO::PARAM_STR);
             $prep2->execute();
             $message = "Image ajoutée avec succès.";
 

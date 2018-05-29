@@ -65,7 +65,7 @@ $allLevel = getAllLevel();
             ?>
             <form action="../controller/controllerProfilModif.php" method="post">
                 <input type="submit" name="Validate" value="Validate"/>
-                <input type="submit" name="Back to main page" value="Back to main page"/>
+                <input type="submit" name="BackToIndex" value="BackToIndex"/>
             </form>
         </div>
     </div>

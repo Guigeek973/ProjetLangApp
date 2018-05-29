@@ -8,11 +8,12 @@
 
 include '../library/util.php';
 include '../models/gestionOubliMdp.php';
-include '../views/MdpOublié.php';
+
+include_once '../views/MdpOublié.php';
 
 
-if ($_POST['submitForgotPassword'] == 'Valider'){
+if ($_POST['forgotPassword'] == 'Valider'){
     oubliMdp();
-    header('Location: controllerAuthentification.php');
+    echo "<script>window.location.replace('/');</script>";
 }
 ?>

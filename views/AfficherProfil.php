@@ -29,9 +29,9 @@ $lang = getInfosLanguages();
             echo "<div class=\"row\"><label>Your wished language 3 : </label>" . $lang[0]['name'] . "</div><br/>";
             echo "<div class=\"row\"><label>Associated level wish 3 : </label>" . $lang[1]['niveau'] . "</div><br/>";
             ?>
-            <form action="controllerProfil.php" method="post">
+            <form action="../controller/controllerProfil.php" method="post">
                 <input type="submit" name="Modify" value="Modify"/>
-                <input type="submit" name="Back to main page" value="Back to main page"
+                <input type="submit" name="BackToIndex" value="BackToIndex"/>
             </form>
         </div>
     </div>
