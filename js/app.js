@@ -1,21 +1,15 @@
-/**
- * Codons un chat en HTML/CSS/Javascript avec nos amis PHP et MySQL
- */
-
-/**
- * Il nous faut une fonction pour récupérer le JSON des
- * messages et les afficher correctement
- */
 function getMessages(){
   // 1. Elle doit créer une requête AJAX pour se connecter au serveur, et notamment au fichier handler.php
   const requeteAjax = new XMLHttpRequest();
-  requeteAjax.open("GET", "handlerAJAX.php");
+  requeteAjax.open("GET", "../models/handlerAJAX.php");
 
   // 2. Quand elle reçoit les données, il faut qu'elle les traite (en exploitant le JSON) et il faut qu'elle affiche ces données au format HTML
   requeteAjax.onload = function(){
     const resultat = JSON.parse(requeteAjax.responseText);
     const html = resultat.reverse().map(function(message){
-      return '<div class="message"><span class="date">${message.created_at.substring(11, 16)}</span><span class="author">${message.from}</span> : <span class="content">${message.content}</span></div>';
+      return '<div class="message">' +
+          '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
+          '<span class="author">' + message.from_id + '</span> : <span class="content">' + message.content + '</span></div>';
     }).join('');
 
     const messages = document.querySelector('.messages');
@@ -45,7 +39,7 @@ function postMessage(event){
 
   // 4. Elle doit configurer une requête ajax en POST et envoyer les données
   const requeteAjax = new XMLHttpRequest();
-  requeteAjax.open('POST', 'handlerAJAX.php?task=write');
+  requeteAjax.open('POST', '../models/handlerAJAX.php?task=write');
 
   requeteAjax.onload = function(){
     content.value = '';
@@ -56,8 +50,14 @@ function postMessage(event){
   requeteAjax.send(data);
 }
 
+function getElementIdContact(e) {
+    document.cookie = "idContactSelected = e.target.id";
+    var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)idContactSelected\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    alert(e.target.id);
+}
 
-document.querySelector('form').addEventListener('submit', postMessage);
-const interval = window.setInterval(getMessages, 3000);
 getMessages();
+document.querySelector('form').addEventListener('submit', postMessage);
+window.setInterval(getMessages, 3000);
+
 

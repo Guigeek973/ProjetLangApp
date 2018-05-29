@@ -231,6 +231,7 @@ function start_page_secured($title)
                     <!--Tchat-->
                      <section class="chat">
                         <div class="messages">
+                        
                         </div>
                         <div class="user-inputs">
                            <form action="../models/handlerAJAX.php?task=write" method="POST">
@@ -335,10 +336,10 @@ function start_page_min($title)
 
 function end_page()
 {
-    echo '
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="../js/main.js"></script>
+    <script src="../js/app.js"></script>
 </body>
 </html>';
 };
@@ -374,14 +375,12 @@ function addToBD() {
         $password = $_POST['password-register'];
         $passwordV = $_POST['confirm-password'];
         $select1 = $_POST['natal'];
-
         $select2 = $_POST['langSouhait1'];
         $select3 = $_POST['langSouhait2'];
         $select4 = $_POST['langSouhait3'];
         $select5 = $_POST['nivSouhait1'];
         $select6 = $_POST['nivSouhait2'];
         $select7 = $_POST['nivSouhait3'];
-
         $connect = connection();
         try {
             if (isset($lastname) && isset($firstname) && isset($mail) && isset($password) && isset($passwordV) && $password == $passwordV) {
@@ -402,7 +401,6 @@ function addToBD() {
                     $prep->execute();
                     $prep->closeCursor();
                     $prep = NULL;
-
                     $query0 = 'SELECT id FROM user WHERE email=:mail';
                     $prep0 = $connect->prepare($query0);
                     $prep0->bindParam(':mail', $mail);
@@ -411,7 +409,6 @@ function addToBD() {
                     $prep0->execute();
                     $prep0->closeCursor();
                     $prep0 = NULL;
-
                     $query1 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait1,:nivSouhait1,:idUser)';
                     $prep1 = $connect->prepare($query1);
                     $prep1->bindParam(':idUser', $idUser);
@@ -420,7 +417,6 @@ function addToBD() {
                     $prep1->execute();
                     $prep1->closeCursor();
                     $prep1 = NULL;
-
                     $query2 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait2,:nivSouhait2,:idUser)';
                     $prep2 = $connect->prepare($query2);
                     $prep2->bindParam(':idUser', $idUser);
@@ -429,7 +425,6 @@ function addToBD() {
                     $prep2->execute();
                     $prep2->closeCursor();
                     $prep2 = NULL;
-
                     $query3 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait3,:nivSouhait3,:idUser)';
                     $prep3 = $connect->prepare($query3);
                     $prep3->bindParam(':idUser', $idUser);
@@ -463,7 +458,6 @@ function authentificate()
             $prep1->bindParam(':mail', $mail,  PDO::PARAM_STR);
             $prep1->execute();
             $mailSql = $prep1->fetchColumn();
-
             if ($mailSql == $mail) {
                 $prep1->closeCursor();
                 $prep1 = NULL;
@@ -532,13 +526,14 @@ function getAllContactHTML() {
         $prep = $connect->prepare($query);
         $prep->execute();
         while($names = $prep->fetch()) {
-            $html .= "<button type='submit' name='contact_button' id='" . $names['name'] . "'>
-                    <div class='col-md-3'>
-                        <img src='avatar.png' class='img-responsive' alt='Responsive image'>
-                    </div>
-                    <div class='col-md-9'>"
-                . $names['firstname'] . "-" . $names['name'] .
-                "</div></button>";
+            $html .= "<div onclick='getElementIdContact(event)'>
+                    <button type='submit' name='contact_button' id='" . $row['id_user'] . "'>
+                        <div class='col-md-3'>
+                            <img src='#' class='img-responsive' alt='Responsive image'>
+                        </div>
+                        <div class='col-md-9'>"
+                    . $names['firstname'] . "-" . $names['name'] .
+                    "</div></button></div>";
         }
     }
     return $html;
