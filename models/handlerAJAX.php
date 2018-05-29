@@ -1,8 +1,7 @@
 <?php
-/**
- * Connexion simple à la base de données via PDO !
- */
-$db = new PDO('mysql:host=localhost;dbname=chat;charset=utf8', 'root', '');
+include "../library/gestion_BD.php";
+
+
 
 /**
  * On doit analyser la demande faite via l'URL (GET) afin de déterminer si on souhaite récupérer les messages ou en écrire un
@@ -23,10 +22,10 @@ if($task == "write"){
  * Si on veut récupérer, il faut envoyer du JSON
  */
 function getMessages(){
-  global $db;
+    $connect = connection();
 
   // 1. On requête la base de données pour sortir les 20 derniers messages
-  $resultats = $db->query("SELECT * FROM `messages` ORDER BY id DESC  LIMIT 12");
+  $resultats = $connect->query("SELECT * FROM `messages` ORDER BY id DESC  LIMIT 12");
   // 2. On traite les résultats
   $messages = $resultats->fetchAll();
   // 3. On affiche les données sous forme de JSON
@@ -36,8 +35,8 @@ function getMessages(){
  * Si on veut écrire au contraire, il faut analyser les paramètres envoyés en POST et les sauver dans la base de données
  */
 function postMessage(){
-  global $db;
   // 1. Analyser les paramètres passés en POST (author, content)
+  $connect = connection();
   if(!array_key_exists('author', $_POST) || !array_key_exists('content', $_POST)){
     echo json_encode(["status" => "error", "message" => "One field or many have not been sent"]);
     return;
@@ -46,7 +45,7 @@ function postMessage(){
   $content = $_POST['content'];
 
   // 2. Créer une requête qui permettra d'insérer ces données
-  $query = $db->prepare("INSERT INTO messages( author, content, created_at) VALUES ('$author','$content',2017)");
+  $query = $connect->prepare("INSERT INTO messages( author, content, created_at) VALUES ('$author','$content',2017)");
   //$query = $db->prepare('INSERT INTO messages SET author = :author, content = :content, created_at = NOW()');
 
   $query->execute();
