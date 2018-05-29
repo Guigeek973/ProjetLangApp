@@ -25,7 +25,7 @@ function getMessages(){
     $connect = connection();
 
   // 1. On requête la base de données pour sortir les 20 derniers messages
-  $resultats = $connect->query("SELECT * FROM `messages` ORDER BY id DESC  LIMIT 12");
+  $resultats = $connect->query("SELECT * FROM messages ORDER BY id DESC  LIMIT 12 WHERE to_id = ".$_SESSION['idContactSelected'] );
   // 2. On traite les résultats
   $messages = $resultats->fetchAll();
   // 3. On affiche les données sous forme de JSON
@@ -37,18 +37,23 @@ function getMessages(){
 function postMessage(){
   // 1. Analyser les paramètres passés en POST (author, content)
   $connect = connection();
-  if(!array_key_exists('author', $_POST) || !array_key_exists('content', $_POST)){
+  if(!array_key_exists('content', $_POST)){
     echo json_encode(["status" => "error", "message" => "One field or many have not been sent"]);
     return;
   }
-  $author = $_POST['author'];
+
+
   $content = $_POST['content'];
-
   // 2. Créer une requête qui permettra d'insérer ces données
-  $query = $connect->prepare("INSERT INTO messages( author, content, created_at) VALUES ('$author','$content',2017)");
+  $query = "INSERT INTO messages( from_id, to_id, content, creat_at) VALUES (:author,:destinataire,:content,2017)";
+  $prep = $connect->prepare($query);
+  $prep->bindParam(':author', $_SESSION['idUser']);
+  $prep->bindParam(':destinataire', $_SESSION['idContactSelected']);
+  $prep->bindParam(':content', $content);
+  $prep->execute();
+  $prep->closeCursor();
+  $prep = NULL;
   //$query = $db->prepare('INSERT INTO messages SET author = :author, content = :content, created_at = NOW()');
-
-  $query->execute();
 
 }
 

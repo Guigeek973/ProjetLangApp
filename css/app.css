@@ -1,11 +1,11 @@
 .conversation-scroll
 {
-    height: 450px;
+  height: 450px;
   overflow-y:scroll;
 }
 .conversation-scroll-contact
 {
-    height: 550px;
+  height: 550px;
   overflow-y:scroll;
 }
 #contact,#recherche
@@ -38,7 +38,7 @@ header {
   padding: 0.3em;
 }
 
-.date, .author {
+.date {
   font-weight: bold;
 }
 
@@ -56,16 +56,12 @@ input {
   margin-right: 10px;
 }
 
-#author {
-  width: 20%;
-}
-
 #content {
-  width: 60%;
+  width: 100%;
 }
 
 button[type="submit"]{
-  width: 20%;
+  width: 100%;
 }
 
 .column {

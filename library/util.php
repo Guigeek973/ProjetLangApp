@@ -234,7 +234,6 @@ function start_page_secured($title)
                         </div>
                         <div class="user-inputs">
                            <form action="../models/handlerAJAX.php?task=write" method="POST">
-                              <input type="text" name="author" id="author" placeholder="Nickname ?">
                               <input type="text" name="content" id="content"  placeholder="Type in your message right here bro !">
                               <button type="submit">Send !</button>
                            </form>
@@ -246,7 +245,8 @@ function start_page_secured($title)
                   <div class="panel-body">
                      <div class="row">
                         <div id="recherche">
-                           barre de recherche
+                            <input type="search" id="" name="">
+                            <button>Rechercher</button>
                         </div>
                      </div>
                   </div>
@@ -287,7 +287,7 @@ function start_page_secured($title)
                   </div>
                </div>
             </div>
-            <script src="js/app.js"></script>
+            <script src="../js/app.js"></script>
             <!-- COLONNE CONTACT -->
             <div class="col-md-3">
                <div class="panel panel-default">
@@ -296,25 +296,16 @@ function start_page_secured($title)
                         <div class="panel-body">
                            <div class="row">
                               <div id="contact">
-                                 CONTACT
+                                 <label>CONTACT</label>
                               </div>
                            </div>
                         </div>
                      </div>
                      <br>
                      <br>
-                     <div class=" conversation-scroll-contact">
-                        <!-- CONTACT 1-->
-                        <button type="button" name="button">
-                           <div class="col-md-3">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
-                           </div>
-                           <div class="col-md-9">
-                              contact->nom
-                              contact->prénom
-                           </div>
-                        </button>
-                     </div>
+                     <div class="conversation-scroll-contact">';
+                        echo getAllContactHTML();
+                echo '</div>
                   </div>
                </div>
             </div>
@@ -348,7 +339,6 @@ function end_page()
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="../js/main.js"></script>
-    <script src="../js/app.js"></script>
 </body>
 </html>';
 };
@@ -530,6 +520,30 @@ function getAllLevelHTML() {
     }
     return $html;
 }
+
+function getAllContactHTML() {
+    $connect = connection();
+    $query1 = 'SELECT id_user from avoir WHERE id='. $_SESSION['idUser'];
+    $prep1 = $connect->prepare($query1);
+    $prep1->execute();
+    $html = "";
+    while($row = $prep1->fetch()) {
+        $query = 'SELECT firstname, name from user WHERE id = '. $row['id_user']; //to
+        $prep = $connect->prepare($query);
+        $prep->execute();
+        while($names = $prep->fetch()) {
+            $html .= "<button type='submit' name='contact_button' id='" . $names['name'] . "'>
+                    <div class='col-md-3'>
+                        <img src='avatar.png' class='img-responsive' alt='Responsive image'>
+                    </div>
+                    <div class='col-md-9'>"
+                . $names['firstname'] . "-" . $names['name'] .
+                "</div></button>";
+        }
+    }
+    return $html;
+}
+
 
 function getInfosProfil() {
     $connect = connection();
