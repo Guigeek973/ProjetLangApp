@@ -25,17 +25,31 @@ header {
   text-align: center;
 }
 
-.messages {
-  background-color: steelblue;
+#messages {
+  background-color: white;
   border-radius: 5px;
   padding: 1em;
   height: 50vh;
   overflow: auto;
 }
 
-.message {
-  color: white;
+.messageOfMe {
+  color: steelblue;
   padding: 0.3em;
+  border: 1px solid mediumblue;
+  border-radius: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+
+}
+
+.messageForMe {
+  color: springgreen;
+  padding: 0.3em;
+  border: 1px solid darkgreen;
+  border-radius: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 .date {

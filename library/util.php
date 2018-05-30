@@ -148,6 +148,7 @@ function start_page_secured($title)
   </head>
   <body><br/>
     <div class="container-fluid">
+    <input type="hidden" name="sessionValue" id="sessionValue" value="'; echo (isset($_SESSION['idUser'])) ? $_SESSION['idUser'] : '';echo'"/>
       <div class="row">
             <!-- COLONNE PROFIL+ derniere Conversation active-->
             <div class="col-md-3">
@@ -230,7 +231,7 @@ function start_page_secured($title)
                   <div class="panel-body">
                     <!--Tchat-->
                      <section class="chat">
-                        <div class="messages">
+                        <div id="messages">
                         
                         </div>
                         <div class="user-inputs">

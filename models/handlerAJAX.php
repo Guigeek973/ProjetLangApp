@@ -26,16 +26,17 @@ if($task == "write"){
  */
 function getMessages(){
     $connect = connection();
-    if (!empty($_COOKIE['idContactSelected'])) {
+    if (!empty($_COOKIE['idContactSelected']) && !empty($_SESSION['idUser'])) {
         // 1. On requête la base de données pour sortir les 20 derniers messages
-        $query2 = "SELECT * FROM messages WHERE to_id=" . $_SESSION['idUser'] . " ORDER BY id DESC";
-        $query1 = "SELECT * FROM messages WHERE to_id=" . $_COOKIE['idContactSelected'] . " ORDER BY id DESC";
-        $queries = "$query1; $query2;";
-        $resultats = $connect->query($queries);
+        $query1 = "SELECT messages.id, from_id, content, creat_at, firstname, name FROM messages JOIN user ON from_id = user.id WHERE from_id=" . $_SESSION['idUser'] . " OR from_id=" . $_COOKIE['idContactSelected'] . " ORDER BY messages.id DESC";
+        $resultat1 = $connect->query($query1);
 
-        $messages = $resultats->fetchAll();
+        $json = array();
+        while($row = $resultat1->fetch(PDO::FETCH_ASSOC)) {
+            $json[] = $row;
+        }
 
-        echo json_encode($messages);
+        echo json_encode($json);
     }
     else {
         echo "<script>alert('Contact unselected !');</script>";

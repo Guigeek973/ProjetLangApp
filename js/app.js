@@ -7,15 +7,22 @@ function getMessages(){
   requeteAjax.onload = function(){
     const resultat = JSON.parse(requeteAjax.responseText);
     const html = resultat.reverse().map(function(message){
-      return '<div class="message">' +
-          '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
-          '<span class="author">' + message.from_id + '</span> : <span class="content">' + message.content + '</span></div>';
+        if (message.from_id != document.getElementById('sessionValue').getAttribute('value').valueOf()) {
+            return '<div class="messageForMe">' +
+                '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
+                '<span class="' + message.from_id + '">' + message.firstname + " " + message.name + '</span> : <span class="content">' + message.content + '</span></div>'
+        }
+        if (message.from_id == document.getElementById('sessionValue').getAttribute('value').valueOf()) {
+            return '<div class="messageOfMe">' +
+                '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
+                '<span class="' + message.from_id + '">' + message.firstname + " " + message.name + '</span> : <span class="content">' + message.content + '</span></div>';
+        }
+
     }).join('');
 
-    const messages = document.querySelector('.messages');
-
-    messages.innerHTML = html;
-    messages.scrollTop = messages.scrollHeight;
+      const messages = document.querySelector('#messages');
+      messages.innerHTML = html;
+      messages.scrollTop = messages.scrollHeight;
   };
 
   // 3. On envoie la requête
@@ -56,8 +63,11 @@ function getElementIdContact(e) {
     alert(e.target.id);
 }
 
-getMessages();
-document.querySelector('form').addEventListener('submit', postMessage);
-window.setInterval(getMessages, 3000);
+if (document.querySelector('#sessionValue').getAttribute('value').valueOf() != "") {
+    getMessages();
+    document.querySelector('form').addEventListener('submit', postMessage);
+    window.setInterval(getMessages, 5000);
+}
+
 
 
