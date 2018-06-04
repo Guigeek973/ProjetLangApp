@@ -14,6 +14,6 @@ include_once '../views/MdpOublié.php';
 
 if ($_POST['forgotPassword'] == 'Valider'){
     oubliMdp();
-    echo "<script>window.location.replace('/');</script>";
+    echo "<script>window.location.replace('controllerIndex.php');</script>";
 }
 ?>

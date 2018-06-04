@@ -148,7 +148,10 @@ function start_page_secured($title)
   </head>
   <body><br/>
     <div class="container-fluid">
-    <input type="hidden" name="sessionValue" id="sessionValue" value="'; echo (isset($_SESSION['idUser'])) ? $_SESSION['idUser'] : '';echo'"/>
+    <form name="form-hidden" id="form-hidden" action="../models/handlerHIDDEN.php" method="post">
+        <input type="hidden" name="sessionValue" id="sessionValue" value="'; echo (isset($_SESSION['idUser'])) ? $_SESSION['idUser'] : ''; echo '"/>
+        <input type="hidden" name="idContactSelected" id="idContactSelected" value=""/>
+    </form>
       <div class="row">
             <!-- COLONNE PROFIL+ derniere Conversation active-->
             <div class="col-md-3">
@@ -164,7 +167,7 @@ function start_page_secured($title)
                               </div>
                               <div class="col-md-7">
                                  <div>
-                                    <form id="formDeconnection" method="get" action="controllerIndex.php" role="form">
+                                    <form id="formDeconnection" method="get" action="../controller/controllerIndex.php" role="form">
                                         <button type="submit" class="btn btn-default btn-lg" name="action" value="Deconnection" style="width:52px;">
                                           <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                                         </button>
@@ -235,9 +238,9 @@ function start_page_secured($title)
                         
                         </div>
                         <div class="user-inputs">
-                           <form action="../models/handlerAJAX.php?task=write" method="POST">
+                           <form id="form-chat" action="../models/handlerAJAX.php?task=write" method="POST">
                               <input type="text" name="content" id="content"  placeholder="Type in your message right here bro !">
-                              <button type="submit">Send !</button>
+                              <button id="sendMsg" type="submit">Send !</button>
                            </form>
                         </div>
                      </section>
@@ -306,7 +309,9 @@ function start_page_secured($title)
                      <br>
                      <br>
                      <div class="conversation-scroll-contact">';
-                        echo getAllContactHTML();
+                        if ($_SESSION["idUser"] != "") {
+                            echo getAllContactHTML();
+                        }
                 echo '</div>
                   </div>
                </div>
@@ -338,6 +343,8 @@ function start_page_min($title)
 function end_page()
 {
     echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="../js/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="../js/main.js"></script>
     <script src="../js/app.js"></script>
@@ -527,8 +534,8 @@ function getAllContactHTML() {
         $prep = $connect->prepare($query);
         $prep->execute();
         while($names = $prep->fetch()) {
-            $html .= "<div onclick='getElementIdContact(event)'>
-                    <button type='submit' name='contact_button' id='" . $row['id_user'] . "'>
+            $html .= "<div>
+                    <button type='submit' name='contact_button' class='contact_button' id='" . $row['id_user'] . "'>
                         <div class='col-md-3'>
                             <img src='#' class='img-responsive' alt='Responsive image'>
                         </div>
