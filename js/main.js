@@ -53,8 +53,7 @@
         requeteAjax.send(data);
     }
 
-    $(window).on('load', function() {
-        $('#idContactSelected').val($('.contact_button').first().attr('id'))
+    function getIdContactSession() {
         $.post(
             '../models/handlerHIDDEN.php', // Un script PHP que l'on va créer juste après
             {
@@ -70,18 +69,21 @@
                 }
             }
         );
+    }
 
-
+    $(window).on('load', function() {
+        $('#idContactSelected').val($('.contact_button').first().attr('id'))
+        getIdContactSession()
     });
 
 
 $(document).ready(function() {
 
-
     $("#sendMsg").click(function(e){
         document.getElementById('idContactSelected').setAttribute('value',e.target.id);
         if (document.querySelector('#sessionValue').getAttribute('value').valueOf() != "") {
             if(document.getElementById('idContactSelected').getAttribute('value').valueOf() != "") {
+                getIdContactSession();
                 getMessages();
                 document.querySelector('#form-chat').addEventListener('submit', postMessage);
                 window.setInterval(getMessages, 5000);
@@ -93,6 +95,7 @@ $(document).ready(function() {
         document.getElementById('idContactSelected').setAttribute('value',event.target.id);
         if (document.querySelector('#sessionValue').getAttribute('value').valueOf() != "") {
             if(document.getElementById('idContactSelected').getAttribute('value').valueOf() != "") {
+                getIdContactSession();
                 getMessages();
                 document.querySelector('#form-chat').addEventListener('submit', postMessage);
                 window.setInterval(getMessages, 5000);
