@@ -144,7 +144,7 @@ function start_page_secured($title)
     <title>' . $title . '</title>
     <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet"  href="../css/app.css"/>
-    <link rel="icon" type="image/png" href="../img/favicon.png" />
+    <link rel="icon" type="image/png" href="../avatar.png" />
   </head>
   <body><br/>
     <div class="container-fluid">
@@ -162,7 +162,7 @@ function start_page_secured($title)
                         <div class="panel-body">
                            <div class="row">
                               <div class="col-md-5">
-                                 <img src="avatar.png" class="img-responsive" alt="Responsive image">
+                                 <img src="../avatar.png" class="img-responsive" alt="Responsive image">
                                  <label>joseph alain</label>
                               </div>
                               <div class="col-md-7">
@@ -238,7 +238,7 @@ function start_page_secured($title)
                      <div class="row">
                         <div id="recherche">
                            <div class="col-md-2">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
+                              <img src="../avatar.png" class="img-responsive" alt="Responsive image">
                            </div>
                            <div class="col-md-4">
                               <div class="panel panel-default">
@@ -311,7 +311,7 @@ function start_page_min($title)
     <title>' . $title . '</title>
     <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet"  href="../css/login.css"/>
-    <link rel="icon" type="image/png" href="../img/favicon.png" />
+    <link rel="icon" type="image/png" href="../avatar.png" />
   </head>
   <body><br/>
   ';
@@ -392,7 +392,7 @@ function getAllContactHTML() {
             $html .= "<div>
                     <button type='submit' name='contact_button' class='contact_button' id='" . $row['id_user'] . "'>
                         <div class='col-md-3'>
-                            <img src='#' class='img-responsive' alt='Responsive image'>
+                            <img src='../avatar.png' class='img-responsive' alt='Responsive image'>
                         </div>
                         <div class='col-md-9'>"
                     . $names['firstname'] . "-" . $names['name'] .
@@ -409,25 +409,24 @@ function getLastConversationsHTML() {
     $prep = $connect->prepare($query);
     $prep->execute();
     $html = "";
-    while($x = $prep->fetch()) { //x = 1 puis x = 2
-        $query2 = "SELECT content FROM messages WHERE creat_at IN
+    while($x = $prep->fetch(PDO::FETCH_ASSOC)) { //x = 1 puis x = 2
+        $query2 = "SELECT content, user.name, user.firstname FROM messages JOIN user ON to_id = user.id WHERE creat_at IN
               (SELECT MAX(creat_at) FROM messages WHERE from_id = :x AND to_id = :me OR from_id = :me AND to_id = :x)";
         $prep2 = $connect->prepare($query2);
-        $prep2->bindParam(":x", $x, PDO::PARAM_STR);
+        $prep2->bindParam(":x", $x['to_id'], PDO::PARAM_STR);
         $prep2->bindParam(":me", $_SESSION['idUser'], PDO::PARAM_STR);
         $prep2->execute();
         while($lastConversationMsg = $prep2->fetch()) {
             $html .= "<button type=\"button\" name=\"button\">
+                        <div class='row'>
                            <div class=\"col-md-3\">
-                              <img src=\"avatar.png\" class=\"img-responsive\" alt=\"Responsive image\">
+                              <img src=\"../avatar.png\" class=\"img-responsive\" alt=\"Pas de photo\">
                            </div>
-                           <div class=\"col-md-6\">" .
+                           <div class=\"col-md-9\">
+                            <div class='row'>". $lastConversationMsg['name'] . " " . $lastConversationMsg['firstname'] . "</div>
+                           <div class='row'>" .
                             $lastConversationMsg['content'] .
-                          "</div>
-                            <div class=\"col-md-3\">
-                               <img src=\"avatar.png\" class=\"img-responsive\" alt=\"Responsive image\">
-                               <img src=\"avatar.png\" class=\"img-responsive\" alt=\"Responsive image\">
-                           </div>
+                          "</div></div></div>
                         </button>";
         }
     }
