@@ -72,8 +72,8 @@
     }
 
     $(window).on('load', function() {
-        $('#idContactSelected').val($('.contact_button').first().attr('id'))
-        getIdContactSession()
+        $('#idContactSelected').val($('.contact_button').first().attr('id'));
+        getIdContactSession();
     });
 
 

@@ -5,7 +5,7 @@
 }
 .conversation-scroll-contact
 {
-  height: 550px;
+  height: 450px;
   overflow-y:scroll;
 }
 #contact,#recherche
