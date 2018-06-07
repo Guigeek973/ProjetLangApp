@@ -9,14 +9,29 @@
             const resultat = JSON.parse(requeteAjax.responseText);
             const html = resultat.reverse().map(function(message){
                 if (message.from_id != document.getElementById('sessionValue').getAttribute('value').valueOf()) {
-                    return '<div class="messageForMe">' +
+                    return '<div class="singleMsg">' +
+                        '<div class="msgOptions">' +
+                        '<button class="translateBtn"><img src="../translate.png"></button>' +
+                        '<button class="correctBtn"><img src="../correct.png"></button>' +
+                        '<button class="copyBtn"><img src="../copy.png"></button>' +
+                        '</div>' +
+                        '<div class="messageForMe">' +
                         '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
-                        '<span class="' + message.from_id + '">' + message.firstname + " " + message.name + '</span> : <span class="content">' + message.content + '</span></div>'
+                        '<span class="' + message.from_id + '">' + message.firstname + " " + message.name + '</span> : <span class="content">' + message.content
+                        + '</span></div></div>';
                 }
                 if (message.from_id == document.getElementById('sessionValue').getAttribute('value').valueOf()) {
-                    return '<div class="messageOfMe">' +
+                    return '<div class="singleMsg">' +
+                        '<div class="msgOptions" style="display:none;">' +
+                        '<button class="translateBtn"><img src="../translate.png"></button>' +
+                        '<button class="correctBtn"><img src="../correct.png"></button>' +
+                        '<button class="copyBtn"><img src="../copy.png"></button>' +
+                        '</div>' +
+                        '<div class="messageOfMe">' +
                         '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
-                        '<span class="' + message.from_id + '">' + message.firstname + " " + message.name + '</span> : <span class="content">' + message.content + '</span></div>';
+                        '<span class="' + message.from_id + '">' + message.firstname + " " + message.name
+                        + '</span> : <span class="content">' + message.content
+                        + '</span></div></div>';
                 }
             }).join('');
 
@@ -53,8 +68,7 @@
         requeteAjax.send(data);
     }
 
-    $(window).on('load', function() {
-        $('#idContactSelected').val($('.contact_button').first().attr('id'))
+    function getIdContactSession() {
         $.post(
             '../models/handlerHIDDEN.php', // Un script PHP que l'on va créer juste après
             {
@@ -70,18 +84,21 @@
                 }
             }
         );
+    }
 
-
+    $(window).on('load', function() {
+        $('#idContactSelected').val($('.contact_button').first().attr('id'));
+        getIdContactSession();
     });
 
 
 $(document).ready(function() {
 
-
     $("#sendMsg").click(function(e){
         document.getElementById('idContactSelected').setAttribute('value',e.target.id);
         if (document.querySelector('#sessionValue').getAttribute('value').valueOf() != "") {
             if(document.getElementById('idContactSelected').getAttribute('value').valueOf() != "") {
+                getIdContactSession();
                 getMessages();
                 document.querySelector('#form-chat').addEventListener('submit', postMessage);
                 window.setInterval(getMessages, 5000);
@@ -93,6 +110,7 @@ $(document).ready(function() {
         document.getElementById('idContactSelected').setAttribute('value',event.target.id);
         if (document.querySelector('#sessionValue').getAttribute('value').valueOf() != "") {
             if(document.getElementById('idContactSelected').getAttribute('value').valueOf() != "") {
+                getIdContactSession();
                 getMessages();
                 document.querySelector('#form-chat').addEventListener('submit', postMessage);
                 window.setInterval(getMessages, 5000);

@@ -144,14 +144,14 @@ function start_page_secured($title)
     <title>' . $title . '</title>
     <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet"  href="../css/app.css"/>
-    <link rel="icon" type="image/png" href="../img/favicon.png" />
+    <link rel="icon" type="image/png" href="../avatar.png" />
   </head>
   <body><br/>
     <div class="container-fluid">
-    <form name="form-hidden" id="form-hidden" action="../models/handlerHIDDEN.php" method="post">
-        <input type="hidden" name="sessionValue" id="sessionValue" value="'; echo (isset($_SESSION['idUser'])) ? $_SESSION['idUser'] : ''; echo '"/>
-        <input type="hidden" name="idContactSelected" id="idContactSelected" value=""/>
-    </form>
+        <form name="form-hidden" id="form-hidden" action="../models/handlerHIDDEN.php" method="post">
+            <input type="hidden" name="sessionValue" id="sessionValue" value="'; echo (isset($_SESSION['idUser'])) ? $_SESSION['idUser'] : ''; echo '"/>
+            <input type="hidden" name="idContactSelected" id="idContactSelected" value=""/>
+        </form>
       <div class="row">
             <!-- COLONNE PROFIL+ derniere Conversation active-->
             <div class="col-md-3">
@@ -162,7 +162,7 @@ function start_page_secured($title)
                         <div class="panel-body">
                            <div class="row">
                               <div class="col-md-5">
-                                 <img src="avatar.png" class="img-responsive" alt="Responsive image">
+                                 <img src="../avatar.png" class="img-responsive" alt="Responsive image">
                                  <label>joseph alain</label>
                               </div>
                               <div class="col-md-7">
@@ -197,34 +197,11 @@ function start_page_secured($title)
                      </div>
                      <br>
                      <br>
-                     <div class="conversation-scroll">
-                        <!-- CONVERSATION 1-->
-                        <button type="button" name="button">
-                           <div class="col-md-3">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
-                           </div>
-                           <div class="col-md-6">
-                              DERNIER MESSAGE DE LA CONVERSATION
-                           </div>
-                           <div class="col-md-3">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
-                           </div>
-                        </button>
-                        <!-- CONVERSATION 2-->
-                        <button type="button" name="button">
-                           <div class="col-md-3">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
-                           </div>
-                           <div class="col-md-6">
-                              DERNIER MESSAGE DE LA CONVERSATION
-                           </div>
-                           <div class="col-md-3">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
-                           </div>
-                        </button>
-                     </div>
+                        <div class="conversation-scroll">';
+                        if ($_SESSION["idUser"] != "") {
+                            echo getLastConversationsHTML();
+                        }
+                echo '</div>
                   </div>
                </div>
             </div>
@@ -261,7 +238,7 @@ function start_page_secured($title)
                      <div class="row">
                         <div id="recherche">
                            <div class="col-md-2">
-                              <img src="avatar.png" class="img-responsive" alt="Responsive image">
+                              <img src="../avatar.png" class="img-responsive" alt="Responsive image">
                            </div>
                            <div class="col-md-4">
                               <div class="panel panel-default">
@@ -334,7 +311,7 @@ function start_page_min($title)
     <title>' . $title . '</title>
     <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet"  href="../css/login.css"/>
-    <link rel="icon" type="image/png" href="../img/favicon.png" />
+    <link rel="icon" type="image/png" href="../avatar.png" />
   </head>
   <body><br/>
   ';
@@ -372,128 +349,6 @@ function start_page($title){
         start_page_secured($title);
     else
         start_page_basic($title);
-}
-
-
-function addToBD() {
-    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == false) {
-        $lastname = $_POST['lastname'];
-        $firstname = $_POST['firstname'];
-        $mail = $_POST['email'];
-        $password = $_POST['password-register'];
-        $passwordV = $_POST['confirm-password'];
-        $select1 = $_POST['natal'];
-        $select2 = $_POST['langSouhait1'];
-        $select3 = $_POST['langSouhait2'];
-        $select4 = $_POST['langSouhait3'];
-        $select5 = $_POST['nivSouhait1'];
-        $select6 = $_POST['nivSouhait2'];
-        $select7 = $_POST['nivSouhait3'];
-        $connect = connection();
-        try {
-            if (isset($lastname) && isset($firstname) && isset($mail) && isset($password) && isset($passwordV) && $password == $passwordV) {
-                $query0 = 'SELECT email FROM user WHERE email=:mail';
-                $prep0 = $connect->prepare($query0);
-                $prep0->bindParam(':mail', $mail);
-                $prep0->execute();
-                $mailBD = $prep0->fetchColumn();
-                if ($mailBD != $mail) {
-                    $query = 'INSERT INTO user(name,firstname,email,password,natal) VALUES (:lastname,:firstname,:mail,:password,:natal)';
-                    $prep = $connect->prepare($query);
-                    $prep->bindParam(':firstname', $firstname);
-                    $prep->bindParam(':lastname', $lastname);
-                    $prep->bindParam(':mail', $mail);
-                    $passwordCoded = md5($password);
-                    $prep->bindParam(':password', $passwordCoded);//$passwordCoded);
-                    $prep->bindParam(':natal', $select1);
-                    $prep->execute();
-                    $prep->closeCursor();
-                    $prep = NULL;
-                    $query0 = 'SELECT id FROM user WHERE email=:mail';
-                    $prep0 = $connect->prepare($query0);
-                    $prep0->bindParam(':mail', $mail);
-                    $prep0->execute();
-                    $idUser = $prep0->fetchColumn();
-                    $prep0->execute();
-                    $prep0->closeCursor();
-                    $prep0 = NULL;
-                    $query1 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait1,:nivSouhait1,:idUser)';
-                    $prep1 = $connect->prepare($query1);
-                    $prep1->bindParam(':idUser', $idUser);
-                    $prep1->bindParam(':souhait1', $select2);
-                    $prep1->bindParam(':nivSouhait1', $select5);
-                    $prep1->execute();
-                    $prep1->closeCursor();
-                    $prep1 = NULL;
-                    $query2 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait2,:nivSouhait2,:idUser)';
-                    $prep2 = $connect->prepare($query2);
-                    $prep2->bindParam(':idUser', $idUser);
-                    $prep2->bindParam(':souhait2', $select3);
-                    $prep2->bindParam(':nivSouhait2', $select6);
-                    $prep2->execute();
-                    $prep2->closeCursor();
-                    $prep2 = NULL;
-                    $query3 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait3,:nivSouhait3,:idUser)';
-                    $prep3 = $connect->prepare($query3);
-                    $prep3->bindParam(':idUser', $idUser);
-                    $prep3->bindParam(':souhait3', $select4);
-                    $prep3->bindParam(':nivSouhait3', $select7);
-                    $prep3->execute();
-                    $prep3->closeCursor();
-                    $prep3 = NULL;
-
-                }
-            } else throw new Exception();
-        } catch (Exception $e) {
-            echo $e->getMessage();?>
-            <script>alert("Resgistering error");</script>
-            <?php
-        }
-    }
-
-}
-
-function authentificate()
-{
-    try {
-        $mail = ($_POST['email-login']);
-        if (isset($_POST['email-login']) && isset($_POST['password-login'])) {
-            $connect = connection();
-            $password = $_POST['password-login'];
-            $passwordCoded = md5($password);
-            $query1 = 'SELECT email FROM user WHERE email=:mail';
-            $prep1 = $connect->prepare($query1);
-            $prep1->bindParam(':mail', $mail,  PDO::PARAM_STR);
-            $prep1->execute();
-            $mailSql = $prep1->fetchColumn();
-            if ($mailSql == $mail) {
-                $prep1->closeCursor();
-                $prep1 = NULL;
-                $query2 = 'SELECT password FROM user WHERE email=:mail';
-                $prep2 = $connect->prepare($query2);
-                $prep2->bindParam(':mail', $mail, PDO::PARAM_STR);
-                $prep2->execute();
-                $MdpSql = $prep2->fetchColumn();
-                if ($MdpSql == $passwordCoded) {//$passwordCoded) {
-                    $prep2->closeCursor();
-                    $prep2 = NULL;
-                    session_start();
-                    $_SESSION["session"] = $mail;
-                    $query3 = 'SELECT id FROM user WHERE email=:mail';
-                    $prep3 = $connect->prepare($query3);
-                    $prep3->bindParam(':mail', $mail,  PDO::PARAM_STR);
-                    $prep3->execute();
-                    $idUser = $prep3->fetchColumn();
-                    $_SESSION["idUser"] = $idUser;
-                }
-            }
-        } else throw new Exception();
-    } catch (Exception $e) {
-        echo $e->getMessage();?>
-        <script>alert("Authentication error");</script>
-        <?php
-    }
-
 }
 
 function getAllLanguagesHTML() {
@@ -537,11 +392,42 @@ function getAllContactHTML() {
             $html .= "<div>
                     <button type='submit' name='contact_button' class='contact_button' id='" . $row['id_user'] . "'>
                         <div class='col-md-3'>
-                            <img src='#' class='img-responsive' alt='Responsive image'>
+                            <img src='../avatar.png' class='img-responsive' alt='Responsive image'>
                         </div>
                         <div class='col-md-9'>"
                     . $names['firstname'] . "-" . $names['name'] .
                     "</div></button></div>";
+        }
+    }
+    return $html;
+}
+
+function getLastConversationsHTML() {
+    $connect = connection();
+    //les gens a qui j'ai parler 1 et 2
+    $query = 'SELECT DISTINCT to_id FROM messages WHERE from_id='. $_SESSION['idUser'];
+    $prep = $connect->prepare($query);
+    $prep->execute();
+    $html = "";
+    while($x = $prep->fetch(PDO::FETCH_ASSOC)) { //x = 1 puis x = 2
+        $query2 = "SELECT content, user.name, user.firstname FROM messages JOIN user ON to_id = user.id WHERE creat_at IN
+              (SELECT MAX(creat_at) FROM messages WHERE from_id = :x AND to_id = :me OR from_id = :me AND to_id = :x)";
+        $prep2 = $connect->prepare($query2);
+        $prep2->bindParam(":x", $x['to_id'], PDO::PARAM_STR);
+        $prep2->bindParam(":me", $_SESSION['idUser'], PDO::PARAM_STR);
+        $prep2->execute();
+        while($lastConversationMsg = $prep2->fetch()) {
+            $html .= "<button type=\"button\" name=\"button\">
+                        <div class='row'>
+                           <div class=\"col-md-3\">
+                              <img src=\"../avatar.png\" class=\"img-responsive\" alt=\"Pas de photo\">
+                           </div>
+                           <div class=\"col-md-9\">
+                            <div class='row'>". $lastConversationMsg['name'] . " " . $lastConversationMsg['firstname'] . "</div>
+                           <div class='row'>" .
+                            $lastConversationMsg['content'] .
+                          "</div></div></div>
+                        </button>";
         }
     }
     return $html;
@@ -682,6 +568,127 @@ function checkPhoto(){
             echo $message;
         }
 
+    }
+
+}
+
+function addToBD() {
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == false) {
+        $lastname = $_POST['lastname'];
+        $firstname = $_POST['firstname'];
+        $mail = $_POST['email'];
+        $password = $_POST['password-register'];
+        $passwordV = $_POST['confirm-password'];
+        $select1 = $_POST['natal'];
+        $select2 = $_POST['langSouhait1'];
+        $select3 = $_POST['langSouhait2'];
+        $select4 = $_POST['langSouhait3'];
+        $select5 = $_POST['nivSouhait1'];
+        $select6 = $_POST['nivSouhait2'];
+        $select7 = $_POST['nivSouhait3'];
+        $connect = connection();
+        try {
+            if (isset($lastname) && isset($firstname) && isset($mail) && isset($password) && isset($passwordV) && $password == $passwordV) {
+                $query0 = 'SELECT email FROM user WHERE email=:mail';
+                $prep0 = $connect->prepare($query0);
+                $prep0->bindParam(':mail', $mail);
+                $prep0->execute();
+                $mailBD = $prep0->fetchColumn();
+                if ($mailBD != $mail) {
+                    $query = 'INSERT INTO user(name,firstname,email,password,natal) VALUES (:lastname,:firstname,:mail,:password,:natal)';
+                    $prep = $connect->prepare($query);
+                    $prep->bindParam(':firstname', $firstname);
+                    $prep->bindParam(':lastname', $lastname);
+                    $prep->bindParam(':mail', $mail);
+                    $passwordCoded = md5($password);
+                    $prep->bindParam(':password', $passwordCoded);//$passwordCoded);
+                    $prep->bindParam(':natal', $select1);
+                    $prep->execute();
+                    $prep->closeCursor();
+                    $prep = NULL;
+                    $query0 = 'SELECT id FROM user WHERE email=:mail';
+                    $prep0 = $connect->prepare($query0);
+                    $prep0->bindParam(':mail', $mail);
+                    $prep0->execute();
+                    $idUser = $prep0->fetchColumn();
+                    $prep0->execute();
+                    $prep0->closeCursor();
+                    $prep0 = NULL;
+                    $query1 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait1,:nivSouhait1,:idUser)';
+                    $prep1 = $connect->prepare($query1);
+                    $prep1->bindParam(':idUser', $idUser);
+                    $prep1->bindParam(':souhait1', $select2);
+                    $prep1->bindParam(':nivSouhait1', $select5);
+                    $prep1->execute();
+                    $prep1->closeCursor();
+                    $prep1 = NULL;
+                    $query2 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait2,:nivSouhait2,:idUser)';
+                    $prep2 = $connect->prepare($query2);
+                    $prep2->bindParam(':idUser', $idUser);
+                    $prep2->bindParam(':souhait2', $select3);
+                    $prep2->bindParam(':nivSouhait2', $select6);
+                    $prep2->execute();
+                    $prep2->closeCursor();
+                    $prep2 = NULL;
+                    $query3 = 'INSERT INTO parler(id_langue, id_level, id_user) VALUES (:souhait3,:nivSouhait3,:idUser)';
+                    $prep3 = $connect->prepare($query3);
+                    $prep3->bindParam(':idUser', $idUser);
+                    $prep3->bindParam(':souhait3', $select4);
+                    $prep3->bindParam(':nivSouhait3', $select7);
+                    $prep3->execute();
+                    $prep3->closeCursor();
+                    $prep3 = NULL;
+
+                }
+            } else throw new Exception();
+        } catch (Exception $e) {
+            echo $e->getMessage();?>
+            <script>alert("Resgistering error");</script>
+            <?php
+        }
+    }
+
+}
+
+function authentificate()
+{
+    try {
+        $mail = ($_POST['email-login']);
+        if (isset($_POST['email-login']) && isset($_POST['password-login'])) {
+            $connect = connection();
+            $password = $_POST['password-login'];
+            $passwordCoded = md5($password);
+            $query1 = 'SELECT email FROM user WHERE email=:mail';
+            $prep1 = $connect->prepare($query1);
+            $prep1->bindParam(':mail', $mail,  PDO::PARAM_STR);
+            $prep1->execute();
+            $mailSql = $prep1->fetchColumn();
+            if ($mailSql == $mail) {
+                $prep1->closeCursor();
+                $prep1 = NULL;
+                $query2 = 'SELECT password FROM user WHERE email=:mail';
+                $prep2 = $connect->prepare($query2);
+                $prep2->bindParam(':mail', $mail, PDO::PARAM_STR);
+                $prep2->execute();
+                $MdpSql = $prep2->fetchColumn();
+                if ($MdpSql == $passwordCoded) {//$passwordCoded) {
+                    $prep2->closeCursor();
+                    $prep2 = NULL;
+                    session_start();
+                    $_SESSION["session"] = $mail;
+                    $query3 = 'SELECT id FROM user WHERE email=:mail';
+                    $prep3 = $connect->prepare($query3);
+                    $prep3->bindParam(':mail', $mail,  PDO::PARAM_STR);
+                    $prep3->execute();
+                    $idUser = $prep3->fetchColumn();
+                    $_SESSION["idUser"] = $idUser;
+                }
+            }
+        } else throw new Exception();
+    } catch (Exception $e) {
+        echo $e->getMessage();?>
+        <script>alert("Authentication error");</script>
+        <?php
     }
 
 }

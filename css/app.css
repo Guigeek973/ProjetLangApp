@@ -5,7 +5,7 @@
 }
 .conversation-scroll-contact
 {
-  height: 550px;
+  height: 450px;
   overflow-y:scroll;
 }
 #contact,#recherche
@@ -23,6 +23,11 @@ body, input, button {
 
 header {
   text-align: center;
+}
+
+img {
+  width: 50px;
+  height: 50px;
 }
 
 #messages {
