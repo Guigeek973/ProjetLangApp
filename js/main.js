@@ -1,47 +1,66 @@
 
     function getMessages(){
-        // 1. Elle doit créer une requête AJAX pour se connecter au serveur, et notamment au fichier handler.php
-        const requeteAjax = new XMLHttpRequest();
-        requeteAjax.open("GET", "../models/handlerAJAX.php");
-
-        // 2. Quand elle reçoit les données, il faut qu'elle les traite (en exploitant le JSON) et il faut qu'elle affiche ces données au format HTML
-        requeteAjax.onload = function(){
-            const resultat = JSON.parse(requeteAjax.responseText);
-            const html = resultat.reverse().map(function(message){
-                if (message.from_id != document.getElementById('sessionValue').getAttribute('value').valueOf()) {
-                    return '<div class="msgAndOptions">' +
-                        '<div class="msgOptions">' +
-                        '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
-                        '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
-                        '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
-                        '</div>' +
-                        '<button class="singleMsg messageForMe" >' +
-                        '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
-                        '<span class="' + message.from_id + '">' + message.firstname + " " + message.name + '</span> : <span class="content">' + message.content
-                        + '</span></button></div>';
+        $.ajax({
+            type: "GET",
+            url: "../models/handlerAJAX.php",
+            dataType: "json",
+            success: function(rs) {
+                var html = "";
+                rs = rs.reverse();
+                for(var i=0 ; i < rs.length; i++) {
+                    if (rs[i].from_id != document.getElementById('sessionValue').getAttribute('value').valueOf()) {
+                        html += '<div class="msgAndOptions">' +
+                            '<div class="msgOptions">' +
+                            '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
+                            '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
+                            '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
+                            '</div>' +
+                            '<button class="singleMsg messageForMe" >' +
+                            '<span class="date">'+ rs[i].creat_at.substring(11,16) +'</span><br/>' +
+                            '<span class="' + rs[i].from_id + '">' + rs[i].firstname + " " + rs[i].name + '</span> : <span class="content">' + rs[i].content
+                            + '</span></button></div>';
+                    }
+                    if (rs[i].from_id == document.getElementById('sessionValue').getAttribute('value').valueOf()) {
+                        html += '<div class="msgAndOptions">' +
+                            '<div class="msgOptions">' +
+                            '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
+                            '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
+                            '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
+                            '</div>' +
+                            '<button class="singleMsg messageOfMe">' +
+                            '<span class="date">'+ rs[i].creat_at.substring(11,16) +'</span><br/>' +
+                            '<span class="' + rs[i].from_id + '">' + rs[i].firstname + " " + rs[i].name
+                            + '</span> : <span class="content">' + rs[i].content
+                            + '</span></button></div>';
+                    }
                 }
-                if (message.from_id == document.getElementById('sessionValue').getAttribute('value').valueOf()) {
-                    return '<div class="msgAndOptions">' +
-                        '<div class="msgOptions">' +
-                        '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
-                        '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
-                        '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
-                        '</div>' +
-                        '<button class="singleMsg messageOfMe">' +
-                        '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
-                        '<span class="' + message.from_id + '">' + message.firstname + " " + message.name
-                        + '</span> : <span class="content">' + message.content
-                        + '</span></button></div>';
-                }
-            }).join('');
+                $('#messages').html(html);
+                $('.msgOptions').addClass('hide');
 
-            const messages = document.querySelector('#messages');
-            messages.innerHTML = html;
-            messages.scrollTop = messages.scrollHeight;
-        };
+                $(".singleMsg").on('click', function () {
+                    if (!$(this).prev(".msgOptions").hasClass('hide')) {
+                        $(this).prev(".msgOptions").removeClass('show').addClass('hide');
+                        $(this).prev(".msgOptions").fadeOut();
+                    } else {
+                        $(this).prev(".msgOptions").removeClass('hide').addClass('show');
+                        $(this).prev(".msgOptions").fadeIn();
+                    }
+                });
 
-        // 3. On envoie la requête
-        requeteAjax.send();
+                // fonction copie
+                $(".copyBtn").click(function () {
+                    $("").clone();
+                });
+                // api google translate
+                $(".translateBtn").click(function () {
+                    $("").select();
+                });
+                // fonction correction, récupère le message, en fait une copie dans un champs non modifiable et une dans un champs texte
+                $(".correctBtn").click(function () {
+                    $("").select();
+                });
+            }
+        });
     }
 
     /**
@@ -94,65 +113,36 @@
 
 
 $(document).ready(function() {
-    $(".msgOptions").each(function() {
-        $(this).addClass('hide');
-        $(this).style('display', 'none');
+    $(function() {
+        $("#sendMsg").click(function (e) {
+            document.querySelector('#form-chat').addEventListener('submit', postMessage);
+            getMessages();
+        });
+        $(".contact_button").click(function (event) {
+            document.getElementById('idContactSelected').setAttribute('value', event.target.id);
+            initChat();
+        });
     });
 
-    $("#sendMsg").click(function(e){
-        document.querySelector('#form-chat').addEventListener('submit', postMessage);
-        getMessages();
-    });
+    $(function() {
 
-    $(".contact_button").click(function(event){
-        document.getElementById('idContactSelected').setAttribute('value',event.target.id);
-        initChat();
+        $('#login-form-link').click(function(e) {
+            $("#login-form").delay(100).fadeIn(100);
+            $("#register-form").fadeOut(100);
+            $('#register-form-link').removeClass('active');
+            $(this).addClass('active');
+            e.preventDefault();
+        });
+        $('#register-form-link').click(function(e) {
+            $("#register-form").delay(100).fadeIn(100);
+            $("#login-form").fadeOut(100);
+            $('#login-form-link').removeClass('active');
+            $(this).addClass('active');
+            e.preventDefault();
+        });
     });
-
-    $(".singleMsg").click(function () {
-        if (!$(this).prev(".msgOptions").hasClass('hide')) {
-            $(this).prev().removeClass('show');
-            $(this).prev().addClass('hide');
-            $(this).prev().fadeOut();
-        } else {
-            $(this).prev().removeClass('hide');
-            $(this).prev().addClass('show');
-            $(this).prev().fadeIn();
-        }
-    });
-
-    // fonction copie
-    $( ".copyBtn").click(function() {
-        $( "" ).clone();
-    });
-    // api google translate
-    $( ".translateBtn").click(function() {
-        $( "" ).select();
-    });
-    // fonction correction, récupère le message, en fait une copie dans un champs non modifiable et une dans un champs texte
-    $( ".correctBtn").click(function() {
-        $( "" ).select();
-    });
-
 
 
 
 });
 
-$(function() {
-
-    $('#login-form-link').click(function(e) {
-        $("#login-form").delay(100).fadeIn(100);
-        $("#register-form").fadeOut(100);
-        $('#register-form-link').removeClass('active');
-        $(this).addClass('active');
-        e.preventDefault();
-    });
-    $('#register-form-link').click(function(e) {
-        $("#register-form").delay(100).fadeIn(100);
-        $("#login-form").fadeOut(100);
-        $('#login-form-link').removeClass('active');
-        $(this).addClass('active');
-        e.preventDefault();
-    });
-});
