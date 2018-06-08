@@ -31,8 +31,15 @@ img {
 }
 
 .imgOptions {
-  width: 10px;
-  height: 10px;
+  width: 25px;
+  height: 25px;
+}
+
+div.msgOptions > button {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  border-radius: 10px;
 }
 
 #messages {
@@ -80,7 +87,7 @@ form {
   justify-content: space-between;
 }
 
-input, button {
+input {
   padding: 0.5em;
 }
 

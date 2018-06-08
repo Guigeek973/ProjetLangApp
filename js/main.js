@@ -101,7 +101,8 @@
         if($('#sessionValue').val() != "" && $('#idContactSelected').val() != "") {
             getMessages();
             document.querySelector('#form-chat').addEventListener('submit', postMessage);
-            window.setInterval(getMessages, 10000);
+            getMessages();
+            //window.setInterval(getMessages, 10000);
         }
     }
 
