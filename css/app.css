@@ -5,7 +5,7 @@
 }
 .conversation-scroll-contact
 {
-  height: 550px;
+  height: 450px;
   overflow-y:scroll;
 }
 #contact,#recherche
@@ -25,17 +25,41 @@ header {
   text-align: center;
 }
 
-.messages {
-  background-color: steelblue;
+img {
+  width: 50px;
+  height: 50px;
+}
+
+.imgOptions {
+  width: 10px;
+  height: 10px;
+}
+
+#messages {
+  background-color: white;
   border-radius: 5px;
   padding: 1em;
   height: 50vh;
   overflow: auto;
 }
 
-.message {
-  color: white;
+.messageOfMe {
+  color: steelblue;
   padding: 0.3em;
+  border: 1px solid mediumblue;
+  border-radius: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+
+}
+
+.messageForMe {
+  color: springgreen;
+  padding: 0.3em;
+  border: 1px solid darkgreen;
+  border-radius: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 .date {
