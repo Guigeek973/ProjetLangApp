@@ -10,10 +10,10 @@
             const html = resultat.reverse().map(function(message){
                 if (message.from_id != document.getElementById('sessionValue').getAttribute('value').valueOf()) {
                     return '<div class="singleMsg">' +
-                        '<div class="msgOptions">' +
-                        '<button class="translateBtn"><img src="../translate.png"></button>' +
-                        '<button class="correctBtn"><img src="../correct.png"></button>' +
-                        '<button class="copyBtn"><img src="../copy.png"></button>' +
+                        '<div class="msgOptions" style="display:none;">' +
+                        '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
+                        '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
+                        '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
                         '</div>' +
                         '<div class="messageForMe">' +
                         '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
@@ -23,9 +23,9 @@
                 if (message.from_id == document.getElementById('sessionValue').getAttribute('value').valueOf()) {
                     return '<div class="singleMsg">' +
                         '<div class="msgOptions" style="display:none;">' +
-                        '<button class="translateBtn"><img src="../translate.png"></button>' +
-                        '<button class="correctBtn"><img src="../correct.png"></button>' +
-                        '<button class="copyBtn"><img src="../copy.png"></button>' +
+                        '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
+                        '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
+                        '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
                         '</div>' +
                         '<div class="messageOfMe">' +
                         '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +

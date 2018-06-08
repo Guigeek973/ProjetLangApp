@@ -30,6 +30,11 @@ img {
   height: 50px;
 }
 
+.imgOptions {
+  width: 10px;
+  height: 10px;
+}
+
 #messages {
   background-color: white;
   border-radius: 5px;
