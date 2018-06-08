@@ -62,6 +62,14 @@ img {
   margin-bottom: 2px;
 }
 
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
+
 .date {
   font-weight: bold;
 }

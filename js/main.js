@@ -9,29 +9,29 @@
             const resultat = JSON.parse(requeteAjax.responseText);
             const html = resultat.reverse().map(function(message){
                 if (message.from_id != document.getElementById('sessionValue').getAttribute('value').valueOf()) {
-                    return '<div class="singleMsg">' +
-                        '<div class="msgOptions" style="display:none;">' +
+                    return '<div class="msgAndOptions">' +
+                        '<div class="msgOptions">' +
                         '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
                         '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
                         '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
                         '</div>' +
-                        '<div class="messageForMe">' +
+                        '<button class="singleMsg messageForMe" >' +
                         '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
                         '<span class="' + message.from_id + '">' + message.firstname + " " + message.name + '</span> : <span class="content">' + message.content
-                        + '</span></div></div>';
+                        + '</span></button></div>';
                 }
                 if (message.from_id == document.getElementById('sessionValue').getAttribute('value').valueOf()) {
-                    return '<div class="singleMsg">' +
-                        '<div class="msgOptions" style="display:none;">' +
+                    return '<div class="msgAndOptions">' +
+                        '<div class="msgOptions">' +
                         '<button class="translateBtn"><img class="imgOptions" src="../translate.png"></button>' +
                         '<button class="correctBtn"><img class="imgOptions" src="../correct.png"></button>' +
                         '<button class="copyBtn"><img class="imgOptions" src="../copy.png"></button>' +
                         '</div>' +
-                        '<div class="messageOfMe">' +
+                        '<button class="singleMsg messageOfMe">' +
                         '<span class="date">'+ message.creat_at.substring(11, 16) +'</span><br/>' +
                         '<span class="' + message.from_id + '">' + message.firstname + " " + message.name
                         + '</span> : <span class="content">' + message.content
-                        + '</span></div></div>';
+                        + '</span></button></div>';
                 }
             }).join('');
 
@@ -74,49 +74,68 @@
             {
                 idSession : $("#sessionValue").val(),  // Nous récupérons la valeur de nos inputs que l'on fait passer à connexion.php
                 idContact : $("#idContactSelected").val()
-            },
-
-            function(data){ // Cette fonction ne fait rien encore, nous la mettrons à jour plus tard
-                if($('#sessionValue').val() != "" && $('#idContactSelected').val() != "") {
-                    getMessages();
-                    document.querySelector('#form-chat').addEventListener('submit', postMessage);
-                    window.setInterval(getMessages, 5000);
-                }
             }
         );
+    }
+
+    function initChat() {
+        if($('#sessionValue').val() != "" && $('#idContactSelected').val() != "") {
+            getMessages();
+            document.querySelector('#form-chat').addEventListener('submit', postMessage);
+            window.setInterval(getMessages, 10000);
+        }
     }
 
     $(window).on('load', function() {
         $('#idContactSelected').val($('.contact_button').first().attr('id'));
         getIdContactSession();
+        initChat();
     });
 
 
 $(document).ready(function() {
+    $(".msgOptions").each(function() {
+        $(this).addClass('hide');
+        $(this).style('display', 'none');
+    });
 
     $("#sendMsg").click(function(e){
-        document.getElementById('idContactSelected').setAttribute('value',e.target.id);
-        if (document.querySelector('#sessionValue').getAttribute('value').valueOf() != "") {
-            if(document.getElementById('idContactSelected').getAttribute('value').valueOf() != "") {
-                getIdContactSession();
-                getMessages();
-                document.querySelector('#form-chat').addEventListener('submit', postMessage);
-                window.setInterval(getMessages, 5000);
-            }
-        }
+        document.querySelector('#form-chat').addEventListener('submit', postMessage);
+        getMessages();
     });
 
     $(".contact_button").click(function(event){
         document.getElementById('idContactSelected').setAttribute('value',event.target.id);
-        if (document.querySelector('#sessionValue').getAttribute('value').valueOf() != "") {
-            if(document.getElementById('idContactSelected').getAttribute('value').valueOf() != "") {
-                getIdContactSession();
-                getMessages();
-                document.querySelector('#form-chat').addEventListener('submit', postMessage);
-                window.setInterval(getMessages, 5000);
-            }
+        initChat();
+    });
+
+    $(".singleMsg").click(function () {
+        if (!$(this).prev(".msgOptions").hasClass('hide')) {
+            $(this).prev().removeClass('show');
+            $(this).prev().addClass('hide');
+            $(this).prev().fadeOut();
+        } else {
+            $(this).prev().removeClass('hide');
+            $(this).prev().addClass('show');
+            $(this).prev().fadeIn();
         }
     });
+
+    // fonction copie
+    $( ".copyBtn").click(function() {
+        $( "" ).clone();
+    });
+    // api google translate
+    $( ".translateBtn").click(function() {
+        $( "" ).select();
+    });
+    // fonction correction, récupère le message, en fait une copie dans un champs non modifiable et une dans un champs texte
+    $( ".correctBtn").click(function() {
+        $( "" ).select();
+    });
+
+
+
 
 });
 
