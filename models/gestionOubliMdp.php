@@ -18,20 +18,18 @@ function oubliMdp() {
         return;
     }
     else {
-        $msg = htmlspecialchars ($_POST['message']);
         $header = "From: \"$mail\"<$mail>\r\n";
         $header .= "MIME-Version: 1.0\r\n";
         $nouveauMdp=uniqid();
-        $msg .= "\n" .'Votre nouveau mot de passe : '. "\n" .$nouveauMdp;
+        $msg = "\n" .'Votre nouveau mot de passe : '. "\n" .$nouveauMdp;
 
 
         mail($mail, $msg, $header);
-        $_SESSION['nouvMdp']='Un mail contenant le nouveau mot de passe vous a été envoyé' . '</br>' . 'Si vous ne recevez pas le message veuillez consulter votre boite de spams' . '</br>';
     }
 
     $nouveauMdp = md5($nouveauMdp);
     $connect = connection();
-    $query = 'UPDATE utilisateur SET password=:nouveauMdp WHERE $mail=:mail';
+    $query = 'UPDATE user SET password=:nouveauMdp WHERE email=:mail';
     $prep = $connect->prepare($query);
     $prep->bindParam(':mail', $mail);
     $prep->bindParam(':nouveauMdp', $nouveauMdp);
@@ -41,5 +39,3 @@ function oubliMdp() {
 
 }
 
-
-?>

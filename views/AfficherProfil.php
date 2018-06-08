@@ -1,61 +1,42 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: julie
- * Date: 20/01/2017
- * Time: 17:02
- */
 
 $title="Profil";
 start_page_min($title);
+
+$data = getInfosProfil();
+$lang = getInfosLanguages();
 ?>
 <div class="container-fluid">
-    <div class="row">
-        <div class="text-center">
-            <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="profil">Votre profil</h4>
-        </div>
-        <div class="col-md-4">
+    <div class="text-center">
+        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="profil">Your profile</h4>
+    </div>
+    <div class="column">
+        <div class="col-md-4 col-md-offset-4">
+            <h5>Your profile picture : </h5>
             <img src="avatar.png" class="img-responsive" alt="Responsive image">
-        </div>
-        <div class="col-md-8">
-            <h5>Votre Photo de profil : </h5>
+            <br/>
+            <?php
+            echo "<div class=\"row\"><label>Firstname : </label>" . $data['firstname'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Lastname : </label>" . $data['name'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Your email : </label>" . $data['email'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Your native language : </label>" . $lang[2]['name'] . "</div><br/>";
 
-            <div class="text-muted">
-                sucma
-            </div>
-            <br>
+            echo "<div class=\"row\"><label>Your wished language 1 : </label>" . $lang[0]['name'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Associated level wish 1 : </label>" . $lang[1]['niveau'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Your wished language 2 : </label>" . $lang[0]['name'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Associated level wish 2 : </label>" . $lang[1]['niveau'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Your wished language 3 : </label>" . $lang[0]['name'] . "</div><br/>";
+            echo "<div class=\"row\"><label>Associated level wish 3 : </label>" . $lang[1]['niveau'] . "</div><br/>";
+            ?>
+            <form action="../controller/controllerProfil.php" method="post">
+                <input type="submit" name="Modify" value="Modify"/>
+                <input type="submit" name="BackToIndex" value="BackToIndex"/>
+            </form>
         </div>
     </div>
 </div>
-<section>
-    <div class="form">
-        <h1> Votre Profil</h1>
 
-        <h5>Votre Photo de profil : </h5>
-        <h5><?php echo $_POST['photoCV'] ?></h5></>
-
-        <h5>Nom: </h5> <?php echo $_POST['nom'] ?></>
-
-        <h5>Prenom :<?php echo $_POST['prenom'] ?></h5>
-
-        <h5>Adresse Mail :<?php echo $_POST['mail'] ?></h5>
-
-        <h5>Téléphone portable :<?php echo $_POST['tel'] ?></h5>
-
-        <h5>Téléphone fixe :<?php echo $_POST['fix'] ?></h5>
-
-        <h5>Adresse :<?php echo $_POST['adr'] ?></h5>
-
-        <h5>Ville :<?php echo $_POST['ville'] ?></h5>
-
-        <h5>Code postal :<?php echo $_POST['codeP'] ?></h5>
-
-        <form action="controllerProfil" method="post">
-            <input type="submit" name="Modifier" value="Modifier"/>
-        </form>
-    </div>
-</section>
 <?php
 end_page();
 ?>

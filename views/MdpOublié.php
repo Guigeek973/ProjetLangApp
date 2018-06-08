@@ -6,7 +6,7 @@
  * Time: 17:06
  */
 $title = 'Oubli de mot de passe';
-start_page($title);
+start_page_min($title);
 ?>
 
 <div class="container">
@@ -16,7 +16,7 @@ start_page($title);
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <form action="controllerOubliMdp" method="post">
+                            <form action="../controller/controllerOubliMdp.php" method="post" role="form">
                                 <div class="form-group">
                                     <label>Entrez votre email : </label>
                                 </div>
@@ -26,11 +26,10 @@ start_page($title);
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-6 col-sm-offset-3">
-                                            <input type="submit" name="submitForgotPassword" tabindex="2" class="form-control btn btn-login btn-success" value="Valider">
+                                            <input type="submit" name="forgotPassword" tabindex="2" class="form-control btn btn-login btn-success" value="Valider">
                                         </div>
                                     </div>
                                 </div>
-                                <?php echo $_SESSION['nouvMdp']?>
                             </form>
                         </div>
                     </div>

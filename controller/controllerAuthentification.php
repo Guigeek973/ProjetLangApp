@@ -1,15 +1,14 @@
 <?php
 
-include ('../library/util.php');
-include('../models/authentificationBD.php');
+include_once ('../library/util.php');
 
 if ($_POST['register-submit'] == 'Register') {
     addToBD();
-    header("Location: controllerIndex.php");
+    echo "<script type='text/javascript'>document.location.replace('controllerIndex.php');</script>";
 }
 
 if ($_POST['login-submit'] == 'Login')
 {
     authentificate();
-    header("Location: controllerIndex.php");
+    echo "<script type='text/javascript'>document.location.replace('controllerIndex.php');</script>";
 }
